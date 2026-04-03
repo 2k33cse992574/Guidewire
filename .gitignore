@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*env/
+.venv/
+venv/
+ENV/
+env.bak/
+.env
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE files
+.idea/

@@ -1,0 +1,12 @@
+# Todo List
+
+- [x] Add probability calibration to all models using isotonic regression    
+- [x] Improve fraud ranking by training ML model for Stage 2 severity        
+- [x] Create business simulation layer showing fraud prevention, review load, ROI
+- [x] Upgrade premium model with XGBoost and additional features
+- [x] Update performance report with new architecture and ratings
+- [x] Add failure mode analysis (where model fails, sensitivity, segment behavior, stability)
+- [x] Push fraud reject recall to 0.65+ with top-10% rule, new features, mid-risk overlap
+- [-] Add richer severity features (velocity, deviation, temporal) to fraud model
+- [-] Build explainable dashboard for decision reasoning
+- [-] Validate on real data for true performance metrics
