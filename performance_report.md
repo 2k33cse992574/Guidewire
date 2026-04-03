@@ -4,6 +4,7 @@
 - **Architecture**: Production-grade ML decision system with calibrated risk scoring, ranking-based decisions, and business impact simulation
 - **Models**: Premium (XGBoost regression with interactions), Predictive (calibrated ensemble), Fraud (two-stage ranking with ML severity model)
 - **Evaluation**: Deterministic synthetic datasets with probability calibration, explainability, and ROI metrics
+- **Real-Time Integration**: Incorporates live data from external APIs (OpenWeatherMap for weather triggers, AQICN/WAQI for air quality) to drive AI model inputs and parametric insurance triggers in production scenarios
 
 ## Key Changes Since Last Report
 - **Probability Calibration**: All classifiers calibrated using isotonic regression for reliable risk scores
