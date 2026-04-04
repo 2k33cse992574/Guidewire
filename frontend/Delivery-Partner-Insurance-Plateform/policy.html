@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Plan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container page-shell compact-shell">
+    <span class="eyebrow">Step 2</span>
+    <h2>Select Protection Plan</h2>
+    <p class="subtext">Choose the weekly premium and coverage amount that best protects the delivery partner's earnings.</p>
+
+    <div class="plan-grid">
+      <div class="card plan-card">
+        <span class="plan-badge">Starter</span>
+        <h3>Rs 49/week</h3>
+        <p>Coverage Rs 1000</p>
+        <button onclick="selectPlan(49, 1000)">Choose Starter</button>
+      </div>
+
+      <div class="card plan-card featured-plan">
+        <span class="plan-badge">Most Balanced</span>
+        <h3>Rs 99/week</h3>
+        <p>Coverage Rs 2500</p>
+        <button onclick="selectPlan(99, 2500)">Choose Plus</button>
+      </div>
+
+      <div class="card plan-card">
+        <span class="plan-badge">Max Cover</span>
+        <h3>Rs 199/week</h3>
+        <p>Coverage Rs 5000</p>
+        <button onclick="selectPlan(199, 5000)">Choose Pro</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="demo-data.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

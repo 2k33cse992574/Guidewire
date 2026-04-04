@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trigger Disruption</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container page-shell compact-shell">
+    <span class="eyebrow">Step 4</span>
+    <h2>Trigger Live Disruption</h2>
+    <p class="subtext">Use this screen during the demo to simulate conditions that reduce a partner's earnings and immediately show coverage value.</p>
+
+    <div class="card form-card">
+      <div id="claimStats" class="stats-strip"></div>
+      <div class="hero-actions form-actions stacked-mobile">
+        <button onclick="simulate('rain')">Rain Alert</button>
+        <button onclick="simulate('traffic')">Traffic Delay</button>
+        <button onclick="simulate('outage')">Network Outage</button>
+      </div>
+      <p id="msg" class="feedback"></p>
+      <div class="hero-actions form-actions">
+        <button class="secondary" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="demo-data.js"></script>
+  <script src="trigger.js"></script>
+</body>
+</html>
