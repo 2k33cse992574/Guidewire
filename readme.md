@@ -515,14 +515,14 @@ IF (rain / heat / AQI trigger fires):
 	•	Zero manual intervention
 💰 6. Automated Payout Workflow
 Trigger → Risk validation → Fraud check → Payout calculation → Payment API
-•⁠  ⁠Payment via Razorpay / UPI (test mode)
+•  Payment via Razorpay / UPI (test mode)
 
 ⸻
 
 🔐 7. Continuous Learning Loop
 System improves over time:
 New data → retrain models → better risk prediction → better pricing
-•⁠  ⁠Store:
+•  Store:
 	•	Trigger history
 	•	Claim outcomes
 	•	Fraud patterns

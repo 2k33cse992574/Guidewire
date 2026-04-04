@@ -69,7 +69,7 @@ class FraudDetector:
             
             # Calibrate probabilities for better ranking
             self.stage1_model = CalibratedClassifierCV(
-                self.stage1_model, method='isotonic', cv='prefit'
+                self.stage1_model, method='isotonic', cv=2
             )
             self.stage1_model.fit(meta_features, fraud_binary)
 
@@ -101,7 +101,7 @@ class FraudDetector:
 
                 base_ranker.fit(ranking_features, severity_binary)
                 try:
-                    calibrated = CalibratedClassifierCV(base_ranker, method='isotonic', cv='prefit')
+                    calibrated = CalibratedClassifierCV(base_ranker, method='isotonic', cv=2)
                     calibrated.fit(ranking_features, severity_binary)
                     self.stage2_ranker = calibrated
                 except Exception:

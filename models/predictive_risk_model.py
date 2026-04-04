@@ -123,24 +123,24 @@ class PredictiveRiskModel:
             X_scaled = self.scaler.fit_transform(X)
             self.model.fit(X_scaled, y)
             # Calibrate probabilities
-            self.model = CalibratedClassifierCV(self.model, method='isotonic', cv='prefit')
+            self.model = CalibratedClassifierCV(self.model, method='isotonic', cv=2)
             self.model.fit(X_scaled, y)
         elif self.model_type == "stacked" and self.base_models is not None:
             expanded = self._expand_features(X)
             for base in self.base_models:
                 if isinstance(base, LogisticRegression):
                     base.fit(self.scaler.fit_transform(X), y)
-                    base = CalibratedClassifierCV(base, method='isotonic', cv='prefit')
+                    base = CalibratedClassifierCV(base, method='isotonic', cv=2)
                     base.fit(self.scaler.transform(X), y)
                 else:
                     base.fit(expanded, y)
-                    base = CalibratedClassifierCV(base, method='isotonic', cv='prefit')
+                    base = CalibratedClassifierCV(base, method='isotonic', cv=2)
                     base.fit(expanded, y)
         else:
             X_transformed = self._expand_features(X)
             self.model.fit(X_transformed, y)
             # Calibrate probabilities
-            self.model = CalibratedClassifierCV(self.model, method='isotonic', cv='prefit')
+            self.model = CalibratedClassifierCV(self.model, method='isotonic', cv=2)
             self.model.fit(X_transformed, y)
         self.is_trained = True
 

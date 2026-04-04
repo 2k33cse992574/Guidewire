@@ -1,5 +1,7 @@
 import os
-from fastapi import FastAPI, Request
+import hashlib
+import uuid
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
@@ -41,7 +43,8 @@ fraud_detector.fit(fraud_X)
 global_claims = {
     "rain": 0,
     "traffic": 0,
-    "outage": 0
+    "outage": 0,
+    "fraud_flags": 0
 }
 payouts = {
     "rain": 1000,
@@ -49,12 +52,82 @@ payouts = {
     "outage": 1200
 }
 
+# Auth Databases defined explicitly below
+
+class RegisterRequest(BaseModel):
+    name: str
+    phone: str
+    password: str
+    platform: str
+
+class LoginRequest(BaseModel):
+    phone: str
+    password: str
+
 class TriggerRequest(BaseModel):
     type: str
 
 class MetricsRequest(BaseModel):
     plan: dict
     user: dict
+
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# Pre-seed demo user so demo login never fails after server restart
+users_db = {
+    "9876543210": {
+        "name": "Aarav Singh",
+        "phone": "9876543210",
+        "password": hash_password("demo123"),
+        "platform": "Swiggy"
+    }
+}
+sessions_db = {}
+
+@app.post("/api/auth/register")
+async def register_user(req: RegisterRequest):
+    if req.phone in users_db:
+        raise HTTPException(status_code=400, detail="Node ID already registered")
+    
+    users_db[req.phone] = {
+        "name": req.name,
+        "phone": req.phone,
+        "password": hash_password(req.password),
+        "platform": req.platform
+    }
+    
+    token = str(uuid.uuid4())
+    sessions_db[token] = req.phone
+    
+    return {
+        "status": "success",
+        "token": token,
+        "user": {
+            "name": req.name,
+            "phone": req.phone,
+            "platform": req.platform
+        }
+    }
+
+@app.post("/api/auth/login")
+async def login_user(req: LoginRequest):
+    user = users_db.get(req.phone)
+    if not user or user["password"] != hash_password(req.password):
+        raise HTTPException(status_code=401, detail="Invalid Node ID or Passkey")
+    
+    token = str(uuid.uuid4())
+    sessions_db[token] = req.phone
+    
+    return {
+        "status": "success",
+        "token": token,
+        "user": {
+            "name": user["name"],
+            "phone": user["phone"],
+            "platform": user["platform"]
+        }
+    }
 
 @app.post("/api/metrics")
 async def get_metrics(req: MetricsRequest):
@@ -93,6 +166,18 @@ async def get_metrics(req: MetricsRequest):
     coverage_limit = max(1, req.plan.get("coverage", 2500) * 2) # Example scaling from frontend
     coverage_used = min(100, int((total_saved / coverage_limit) * 100))
 
+    # Predictive Disruption Analytics
+    pred_probs = predictive_model.predict_probability({
+        "rain_intensity": weather_r,
+        "historic_disruption_rate": 0.3,
+        "zone_risk": traffic_r,
+        "trigger_count_last_24h": total_claims,
+    })
+
+    # AI Computed Weekly Premium
+    weekly_income = user_profile.get("weekly_income", 4200)
+    calculated_premium = max(49, int(weekly_income * risk_score * 0.05))
+
     return {
         "claims": global_claims,
         "totalClaims": total_claims,
@@ -100,6 +185,9 @@ async def get_metrics(req: MetricsRequest):
         "riskScore": ui_risk_score,
         "coverageUsed": coverage_used,
         "riskLevel": risk_level,
+        "predictiveRisk": int(pred_probs * 100),
+        "weeklyPremium": calculated_premium,
+        "fraudFlags": global_claims["fraud_flags"]
     }
 
 @app.post("/api/trigger")
@@ -112,12 +200,26 @@ async def trigger_claim(req: TriggerRequest):
     scenario = {
         "scenario_name": f"{ctype.capitalize()} Disruption",
         "weather_risk": 0.8 if ctype == "rain" else 0.1,
-        "location_risk": 0.8 if ctype == "traffic" else 0.1,
+        "location_risk": 0.8 if ctype == "traffic" else (0.9 if ctype == "spoof" else 0.1),
         "work_pattern_risk": 0.8 if ctype == "outage" else 0.1,
         "historical_risk": 0.1,
         "aqi_risk": 0.1,
-        "area_risk": 0.1,
-        "event_date": "today"
+        "area_risk": 0.9 if ctype in ("traffic", "spoof", "rain") else 0.1,
+        "event_date": "today",
+        "affected_zone": user_profile.get("zone", ""),
+        "location_signals": {
+            "gps_location": "spoof_delhi" if ctype == "spoof" else "same",
+            "network_location": "mumbai" if ctype == "spoof" else "same",
+            "ip_location": "kolkata" if ctype == "spoof" else user_profile.get("registered_city", "mumbai")
+        },
+        "movement": {
+            "average_speed_kmh": 1.0 if ctype == "spoof" else 15.0,
+            "stationary_minutes": 45 if ctype == "spoof" else 5
+        },
+        "activity": {
+            "deliveries_during_window": 0 if ctype == "spoof" else 2,
+            "active_sessions_during_window": 0 if ctype == "spoof" else 1
+        }
     }
 
     # Process workflow
@@ -132,13 +234,17 @@ async def trigger_claim(req: TriggerRequest):
 
     learning_loop.record_trigger(scenario)
     learning_loop.record_claim_outcome(claim_result)
+
+    # Track frauds
+    if claim_result.get("decision") in ["reject", "soft_flag", "soft_flagged"]:
+        global_claims["fraud_flags"] = global_claims.get("fraud_flags", 0) + 1
     
     return {"status": "success", "claim_result": claim_result, "payout": payouts.get(ctype, 0)}
 
 @app.post("/api/reset")
 async def reset_state():
     global global_claims
-    global_claims = {"rain": 0, "traffic": 0, "outage": 0}
+    global_claims = {"rain": 0, "traffic": 0, "outage": 0, "fraud_flags": 0}
     return {"status": "reset"}
 
 front_path = os.path.join(os.path.dirname(__file__), "frontend", "Delivery-Partner-Insurance-Plateform")

@@ -1,32 +1,87 @@
 (function () {
   const app = window.DeliveryProtect;
 
-  function saveUser() {
+  async function saveUser() {
     const nameInput = document.getElementById("name");
     const phoneInput = document.getElementById("phone");
+    const passwordInput = document.getElementById("password");
     const platformInput = document.getElementById("platform");
     const error = document.getElementById("signupError");
 
-    if (!nameInput || !phoneInput || !platformInput) {
+    if (!nameInput || !phoneInput || !platformInput || !passwordInput) {
       return;
     }
 
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    if (!name || !phone) {
-      error.textContent = "Please enter the partner name and phone number.";
+    if (!name || !phone || !password) {
+      error.textContent = "Please enter the node ID, name, and passkey.";
       return;
     }
 
-    app.setUser({
-      name: name,
-      phone: phone,
-      platform: platformInput.value
-    });
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          phone: phone,
+          password: password,
+          platform: platformInput.value
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        error.textContent = data.detail || "Registration failed.";
+        return;
+      }
+      localStorage.setItem("authToken", data.token);
+      app.setUser(data.user);
+      app.appendActivity("oracle node profile registered", "success");
+      window.location.href = "policy.html";
+    } catch (e) {
+      error.textContent = "Server error during registration.";
+    }
+  }
 
-    app.appendActivity("partner profile created", "success");
-    window.location.href = "policy.html";
+  async function loginUser() {
+    const phoneInput = document.getElementById("loginPhone");
+    const passwordInput = document.getElementById("loginPassword");
+    const error = document.getElementById("loginError");
+
+    if (!phoneInput || !passwordInput) { return; }
+
+    const phone = phoneInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!phone || !password) {
+      error.textContent = "Please enter your Node ID and Passkey.";
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: phone,
+          password: password
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        error.textContent = data.detail || "Authentication failed.";
+        return;
+      }
+      localStorage.setItem("authToken", data.token);
+      app.setUser(data.user);
+      app.appendActivity("oracle node authenticated", "success");
+      window.location.href = "dashboard.html";
+    } catch (e) {
+      error.textContent = "Server error during login.";
+    }
   }
 
   function selectPlan(plan, coverage) {
@@ -53,9 +108,21 @@
 
   function fillDemoProfile() {
     const demoUser = app.defaults.user;
-    document.getElementById("name").value = demoUser.name;
-    document.getElementById("phone").value = demoUser.phone;
-    document.getElementById("platform").value = demoUser.platform;
+    const n = document.getElementById("name");
+    const ph = document.getElementById("phone");
+    const pw = document.getElementById("password");
+    const pl = document.getElementById("platform");
+    if(n) n.value = demoUser.name;
+    if(ph) ph.value = demoUser.phone;
+    if(pw) pw.value = "demo123";
+    if(pl) pl.value = demoUser.platform;
+  }
+
+  function fillDemoLogin() {
+    const ph = document.getElementById("loginPhone");
+    const pw = document.getElementById("loginPassword");
+    if(ph) ph.value = "9876543210";
+    if(pw) pw.value = "demo123";
   }
 
   function hydrateSignup() {
@@ -79,8 +146,10 @@
   });
 
   window.saveUser = saveUser;
+  window.loginUser = loginUser;
   window.selectPlan = selectPlan;
   window.startDemo = startDemo;
   window.resetDemo = resetDemo;
   window.fillDemoProfile = fillDemoProfile;
+  window.fillDemoLogin = fillDemoLogin;
 })();

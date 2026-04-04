@@ -3,32 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Partner Signup</title>
+  <title>Partner Enrollment | GigHedge</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container page-shell compact-shell">
     <span class="eyebrow">Step 1</span>
-    <h2>Delivery Partner Signup</h2>
-    <p class="subtext">Create a partner profile for the prototype. These details personalize the dashboard and activity timeline.</p>
+    <h2>Oracle Node Enrollment</h2>
+    <p class="subtext">Register your delivery vehicle as an active algorithmic hedging node.</p>
 
-    <div class="card form-card">
-      <input id="name" placeholder="Partner name">
-      <input id="phone" placeholder="Phone number">
-      <select id="platform">
-        <option>Swiggy</option>
-        <option>Zomato</option>
-        <option>Blinkit</option>
-      </select>
-      <div class="hero-actions form-actions">
-        <button onclick="saveUser()">Continue to Plan</button>
-        <button class="secondary" onclick="fillDemoProfile()">Use Demo Profile</button>
+      <div class="card form-card">
+        <input id="name" placeholder="Operator Node Name">
+        <input id="phone" placeholder="Node ID (Phone)">
+        <input type="password" id="password" placeholder="Passkey">
+        <select id="platform">
+          <option>Swiggy</option>
+          <option>Zomato</option>
+          <option>Blinkit</option>
+          <option>Zepto</option>
+        </select>
+        <div class="hero-actions form-actions">
+          <button onclick="saveUser()">Establish Oracle Link</button>
+          <button class="secondary" onclick="location.href='login.html'">Already Enrolled? Link Here</button>
+        </div>
+        <p id="signupError" class="feedback"></p>
       </div>
-      <p id="signupError" class="feedback"></p>
-    </div>
   </div>
 
-  <script src="demo-data.js"></script>
-  <script src="main.js"></script>
+  <script src="demo-data.js?v=2"></script>
+  <script src="main.js?v=2"></script>
 </body>
 </html>

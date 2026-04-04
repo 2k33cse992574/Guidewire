@@ -165,9 +165,9 @@
     ];
 
     const metricCards = [
-      ["Weekly Premium", app.formatMoney(metrics.plan.plan), "Current period", "violet", "Rs"],
-      ["Coverage Status", "Active Protection", `Weekly limit: ${app.formatMoney(metrics.plan.coverage)}`, "green", "SH"],
-      ["Protected Earnings", app.formatMoney(metrics.totalSaved), `Across ${metrics.totalClaims} claims`, "cyan", "UP"],
+      ["Weekly Risk Option", app.formatMoney(metrics.weeklyPremium), "AI-computed dynamic rate", "violet", "Rs"],
+      ["Liquidity Status", "Active Hedge", `Weekly limit: ${app.formatMoney(metrics.plan.coverage)}`, "green", "SH"],
+      ["Injected Liquidity", app.formatMoney(metrics.totalSaved), `Across ${metrics.totalClaims} settlements`, "cyan", "UP"],
       ["Current Risk Level", metrics.riskLevel, `Risk score ${metrics.riskScore}`, "red", "AL"],
       ["Primary Zone", "Mumbai South", `${metrics.user.platform} rider hub`, "amber", "MP"]
     ];
@@ -289,7 +289,7 @@
               <span class="dot dot-yellow"></span>
               <span class="dot dot-green"></span>
             </div>
-            <div class="browser-address">deliveryprotect.io/demo</div>
+            <div class="browser-address">gighedge.io/terminal</div>
           </div>
 
           <div class="app-surface">
@@ -297,14 +297,14 @@
               <div class="brand-wrap reveal" data-delay="0">
                 <div class="brand-mark">DP</div>
                 <div>
-                  <h1>DeliveryProtect AI</h1>
-                  <p>${metrics.user.name} | ${metrics.user.platform} partner protection dashboard</p>
+                  <h1>GigHedge AI Terminal</h1>
+                  <p>${metrics.user.name} | ${metrics.user.platform} partner volatility hedge dashboard</p>
                 </div>
               </div>
 
               <nav class="topnav reveal" data-delay="80">
                 <a class="active" href="dashboard.html">Dashboard</a>
-                <a href="policy.html">My Coverage</a>
+                <a href="policy.html">My Hedge Contract</a>
                 <a href="claim.html">Activity</a>
                 <a href="signup.html">Profile</a>
               </nav>
@@ -320,13 +320,13 @@
             <section class="dashboard-hero reveal" data-delay="120">
               <div class="hero-grid">
                 <div class="hero-copy">
-                  <span class="hero-badge"><span class="glow-dot"></span> Live protection center</span>
-                  <h2>Insurance intelligence built for high-pressure delivery shifts.</h2>
-                  <p>Track coverage, risk, disruption alerts, and protected earnings in one cleaner control room designed to feel more premium and more trustworthy at a glance.</p>
+                  <span class="hero-badge"><span class="glow-dot"></span> Live execution terminal</span>
+                  <h2>Algorithmic micro-hedges built for high-velocity delivery shifts.</h2>
+                  <p>Track your liquidity limits, incoming risk probabilities, disruption vectors, and injected capital in one dynamic quantitative terminal.</p>
 
                   <div class="hero-chip-row">
-                    <div class="hero-chip">Weekly plan <strong>${app.formatMoney(metrics.plan.plan)}</strong></div>
-                    <div class="hero-chip">Coverage <strong>${app.formatMoney(metrics.plan.coverage)}</strong></div>
+                    <div class="hero-chip">Option Cost <strong>${app.formatMoney(metrics.plan.plan)}</strong></div>
+                    <div class="hero-chip">Max Liquidity <strong>${app.formatMoney(metrics.plan.coverage)}</strong></div>
                     <div class="hero-chip">Zone <strong>Mumbai South</strong></div>
                   </div>
 
@@ -337,15 +337,15 @@
 
                   <div class="hero-stats-bar">
                     <div class="hero-stat">
-                      <span>Protected this period</span>
+                      <span>Injected this period</span>
                       <strong data-count-to="${metrics.totalSaved}" data-prefix="Rs ">Rs 0</strong>
                     </div>
                     <div class="hero-stat">
-                      <span>Total disruptions tracked</span>
+                      <span>Network disruptions tracked</span>
                       <strong data-count-to="${metrics.totalClaims}">0</strong>
                     </div>
                     <div class="hero-stat">
-                      <span>Current risk score</span>
+                      <span>Current systemic risk</span>
                       <strong data-count-to="${metrics.riskScore}" data-suffix="%">0%</strong>
                     </div>
                   </div>
@@ -398,7 +398,7 @@
             <section class="dashboard-grid">
               <article class="panel risk-panel reveal" data-delay="260">
                 <div class="panel-header">
-                  <h2>My Risk and Coverage</h2>
+                  <h2>Systemic Risk and Hedged Liquidity</h2>
                   <span>Risk score: ${metrics.riskScore}%</span>
                 </div>
 
@@ -413,7 +413,7 @@
 
                 <div class="progress-block">
                   <div class="progress-copy">
-                    <span>Weekly Coverage Limit</span>
+                    <span>Weekly Hedged Liquidity Limit</span>
                     <span>${coverageLabel}</span>
                   </div>
                   <div class="progress-bar">
@@ -429,7 +429,7 @@
 
               <article class="panel earnings-panel reveal" data-delay="320">
                 <div class="panel-header">
-                  <h2>Earnings Saved to Date</h2>
+                  <h2>Hedged Yield Injected YTD</h2>
                   <span>Live demo data</span>
                 </div>
 
@@ -519,8 +519,8 @@
                 </div>
 
                 <div class="action-row">
-                  <button onclick="location.href='claim.html'">Trigger Claim</button>
-                  <button class="secondary-btn" onclick="location.href='admin.html'">Open Admin</button>
+                  <button onclick="location.href='claim.html'">Inject Kinematic Anomaly</button>
+                  <button class="secondary-btn" onclick="location.href='admin.html'">Open Admin Terminal</button>
                 </div>
               </article>
             </section>
