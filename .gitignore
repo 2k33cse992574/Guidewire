@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*env/
+.venv/
+venv/
+ENV/
+env.bak/
+.env
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE files
+.idea/
+
+# Demo scripts and video files to exclude
+risk_scoring_demo.py
+ai_model_demo.html
+git_status.txt
+todo_list.txt
+*_demo.py
+*_demo.html
+*_action*.js
+*.mp4
+*.mov
+*.avi
+*.mkv
